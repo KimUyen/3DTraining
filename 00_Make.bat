@@ -27,7 +27,9 @@ cls
 	echo.        
 	echo         4. Run Win32
 	echo.
+	echo         5. Build SO
 	echo.
+	echo         6. Build Apk
 	echo.
 )
 
@@ -74,6 +76,18 @@ if %DO_JOB%==1 (
   pause
 
   goto END
+) else if %DO_JOB%==5 (
+		echo.
+		echo ************************ 5. Build SO  ************************
+		
+		pushd %CUR_MPATH%\Tools\FastBuild\
+		call FBuild.exe -config ..\BuildAndroid\fbuildAndroid.bff
+		popd
+		pause
+) else if %DO_JOB%==6 (
+		echo.
+		echo ************************ 6. Build Apk  ************************
+		
 )
 
 :END

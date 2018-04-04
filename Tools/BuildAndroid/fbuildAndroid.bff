@@ -1,1 +1,66 @@
-        1 file(s) copied.
+// Settings //------------------------------------------------------------------------------ 
+Settings 
+{ 
+ .Environment = { } 
+}
+// X86 ToolChain //------------------------------------------------------------------------------ 
+.Compiler = 'C:\DevTools\android-ndk-r14\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe' 
+.CompilerOptions = '"%1"' // Input 
+								+ ' /Fo"%2"' // Output 
+//								+ ' /Z7' // Debug format (in .obj) 
+//								+ ' /c' // Compile only 
+//								+ ' /nologo' // No compiler spam 
+//								+ ' /W4' // Warning level 4 
+//								+ ' /WX-' // Warnings as errors
+.Linker 					= 'C:\DevTools\android-ndk-r14\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe' 
+.LinkerOptions   = ' /OUT:"%2"' // Output 
+								+ ' "%1"' // Input 
+								+ ' /WX' // Warnings as errors 
+								+ ' /NOLOGO' // No linker spam 
+								+ ' /DEBUG' // Keep debug info when linking 
+// Include paths 
+//------------------------------------------------------------------------------ 
+ .BaseIncludePaths = ' /I"./"' 
+									 + ' /I"C:\DevTools\android-ndk-r14\sysroot\usr\include"'
+									 + ' /I"C:\DevTools\android-ndk-r14\sources\cxx-stl\llvm-libc++\include"'
+									 + ' /I"C:\DevTools\android-ndk-r14\platforms\android-21\arch-arm\usr\include"'
+ .CompilerOptions + .BaseIncludePaths 
+ // Library paths 
+ //------------------------------------------------------------------------------ 
+.LibPaths = ' /LIBPATH:"C:\DevTools\android-ndk-r14\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64"'
+						+ ' /LIBPATH:"C:\DevTools\android-ndk-r14\platforms\android-21\arch-arm"'
+ .LinkerOptions + .LibPaths 
+ 
+ // HelloJNI 
+ //------------------------------------------------------------------------------ 
+ObjectList( 'HelloJNI' ) 
+{ 
+	.CompilerInputPath = '.\..\..\Prj\Android\jni' 
+	.CompilerOutputPath = '.\..\..\Build\Android\'
+	.CompilerOutputExtension = '.o'
+	.CompilerOptions + ' -target armv7-none-linux-androideabi'
+									 + ' -c'
+} 
+Executable( 'HelloJNISo' ) 
+{ 
+	.Libraries = { "HelloJNI" } 
+	.LinkerOutput = '.\..\..\Build\Android\HelloJNI.so'
+	.LinkerOptions 	+ ' -lstdc++'
+									+ ' -lGLESv2'
+									+ ' -llog'
+									+ ' -lc'
+									+ ' -lm'
+									+ ' -lz'
+									+ ' -ldl'
+									+ ' -lgcc'
+									+ ' -landroid' 
+									+ ' -lOpenSLES'
+									+ ' -lEGL'
+									+ ' -lgcc'
+									+ ' -gcc-toolchain'
+									+ ' -march=armv7-a'
+									+ ' -target armv7-none-linux-androideabi'
+}
+// All 
+//------------------------------------------------------------------------------ 
+Alias( 'all' ) { .Targets = { 'HelloJNISo' } }
