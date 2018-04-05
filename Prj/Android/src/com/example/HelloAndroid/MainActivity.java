@@ -2,6 +2,7 @@ package com.example.HelloAndroid;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class MainActivity extends Activity
 {
@@ -10,6 +11,9 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+				TextView tx = new TextView(this);
+				HelloJNI hl = new HelloJNI();
+				tx.setText(hl.stringFromJNI());
+        setContentView(tx);
     }
 }
